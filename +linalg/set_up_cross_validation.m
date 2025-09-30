@@ -1,0 +1,16 @@
+function [cv_setup, best_model] = set_up_cross_validation(matrix, num_folds)
+    [m, n] = size(matrix);
+    mask_full = (matrix ~= 0);
+    [users_idx, items_idx] = find(mask_full);
+    num_ratings = length(users_idx);
+    cv_indices = crossvalind('Kfold', num_ratings, num_folds);
+
+    cv_setup = struct('m', m, 'n', n, ...
+                      'mask_full', mask_full, ...
+                      'users_idx', users_idx, ...
+                      'items_idx', items_idx, ...
+                      'num_ratings', num_ratings, ...
+                      'cv_indices', cv_indices);
+
+    best_model = struct('rmse', inf, 'U', [], 'V', [], 'mu', 0);
+end
